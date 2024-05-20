@@ -8,20 +8,20 @@ import { useSearchParams } from 'react-router-dom'
 
 const Rooms = () => {
   const axiosCommon = useAxiosCommon()
- const [parems,setParems]=useSearchParams()
- const category=parems.get("category")
- console.log(category)
-  const { isPending,  data:rooms=[] } = useQuery({
-    queryKey: ['rooms',category],
-    queryFn: async() =>{
- const category=parems.get("category")
-      const {data}=await axiosCommon(`/rooms?category=${category}`)
+  const [parems, setParems] = useSearchParams()
+  const category = parems.get("category")
+  console.log(category)
+  const { isPending, data: rooms = [] } = useQuery({
+    queryKey: ['rooms', category],
+    queryFn: async () => {
+      const category = parems.get("category")
+      const { data } = await axiosCommon(`/rooms?category=${category}`)
       return data
     }
   })
 
   if (isPending) return <LoadingSpinner />
-console.log(rooms)
+  console.log(rooms)
   return (
     <Container>
       {rooms && rooms.length > 0 ? (

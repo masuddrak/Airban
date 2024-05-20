@@ -1,7 +1,39 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
+import axios from 'axios'
+import useAuth from '../../hooks/useAuth'
+import { SiProteus } from "react-icons/si";
 
 const SignUp = () => {
+  const { setLoading, createUser, loading, updateUserProfile } = useAuth()
+  const naviget=useNavigate()
+  const handelForm = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const name = form.name.value
+    const email = form.email.value
+    const password = form.password.value
+    const image = form.image.files[0]
+    console.log(name, email, password)
+    console.log(image)
+    const fromData = new FormData()
+    fromData.append("image", image)
+    try {
+      setLoading(true)
+      // uploade image 
+      const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_URL}`, fromData)
+      console.log(data.data.display_url)
+      // create user
+      const resut = await createUser(email, password)
+      console.log(resut)
+      // update profile
+      await updateUserProfile(name, data.data.display_url)
+      setLoading(false)
+      naviget("/")
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className='flex justify-center items-center min-h-screen'>
       <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
@@ -9,7 +41,7 @@ const SignUp = () => {
           <h1 className='my-3 text-4xl font-bold'>Sign Up</h1>
           <p className='text-sm text-gray-400'>Welcome to StayVista</p>
         </div>
-        <form
+        <form onSubmit={handelForm}
           noValidate=''
           action=''
           className='space-y-6 ng-untouched ng-pristine ng-valid'
@@ -77,7 +109,10 @@ const SignUp = () => {
               type='submit'
               className='bg-rose-500 w-full rounded-md py-3 text-white'
             >
-              Continue
+              {
+                loading ? <SiProteus className='animate-spin'></SiProteus> : "Continue"
+              }
+
             </button>
           </div>
         </form>
