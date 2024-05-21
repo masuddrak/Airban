@@ -3,9 +3,10 @@ import { FcGoogle } from 'react-icons/fc'
 import axios from 'axios'
 import useAuth from '../../hooks/useAuth'
 import { SiProteus } from "react-icons/si";
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
-  const { setLoading, createUser, loading, updateUserProfile } = useAuth()
+  const { setLoading, createUser, loading, updateUserProfile,signInWithGoogle } = useAuth()
   const naviget=useNavigate()
   const handelForm = async (e) => {
     e.preventDefault()
@@ -30,6 +31,16 @@ const SignUp = () => {
       await updateUserProfile(name, data.data.display_url)
       setLoading(false)
       naviget("/")
+      toast.success('Create User Successfully!')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handelGoogleSignin=async()=>{
+    try {
+      await signInWithGoogle()
+      naviget("/")
+      toast.success('Login Successfully!')
     } catch (error) {
       console.log(error)
     }
@@ -110,7 +121,7 @@ const SignUp = () => {
               className='bg-rose-500 w-full rounded-md py-3 text-white'
             >
               {
-                loading ? <SiProteus className='animate-spin'></SiProteus> : "Continue"
+                loading ? <SiProteus className='animate-spin m-auto'></SiProteus> : "Continue"
               }
 
             </button>
@@ -123,11 +134,11 @@ const SignUp = () => {
           </p>
           <div className='flex-1 h-px sm:w-16 dark:bg-gray-700'></div>
         </div>
-        <div className='flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
+        <button onClick={handelGoogleSignin} disabled={loading} className='disabled:cursor-not-allowed flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer'>
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>
-        </div>
+        </button>
         <p className='px-6 text-sm text-center text-gray-400'>
           Already have an account?{' '}
           <Link
