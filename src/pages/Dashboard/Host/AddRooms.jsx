@@ -18,10 +18,11 @@ const AddRooms = () => {
     const [dates, setDates] = useState(
         {
             startDate: new Date(),
-            endDate: null,
+            endDate: new Date(),
             key: 'selection'
         }
     );
+    console.log(dates)
     // handel post data room
     const { mutateAsync } = useMutation({
         mutationFn: async (formData) => {
