@@ -1,9 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
-import axios from 'axios'
+
 import useAuth from '../../hooks/useAuth'
 import { SiProteus } from "react-icons/si";
 import toast from 'react-hot-toast';
+import { uploadImage } from '../../Api/utils';
 
 const SignUp = () => {
   const { setLoading, createUser, loading, updateUserProfile,signInWithGoogle } = useAuth()
@@ -17,23 +18,22 @@ const SignUp = () => {
     const image = form.image.files[0]
     console.log(name, email, password)
     console.log(image)
-    const fromData = new FormData()
-    fromData.append("image", image)
+
     try {
       setLoading(true)
       // uploade image 
-      const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_URL}`, fromData)
-      console.log(data.data.display_url)
+      const image_url=await uploadImage(image)
       // create user
       const resut = await createUser(email, password)
       console.log(resut)
       // update profile
-      await updateUserProfile(name, data.data.display_url)
+      await updateUserProfile(name, image_url)
       setLoading(false)
       naviget("/")
       toast.success('Create User Successfully!')
     } catch (error) {
       console.log(error)
+      setLoading(false)
     }
   }
   const handelGoogleSignin=async()=>{

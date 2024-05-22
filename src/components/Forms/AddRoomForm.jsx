@@ -1,11 +1,12 @@
 import { categories } from '../Categories/CategoriesData'
 import { DateRange } from 'react-date-range';
-const AddRoomForm = ({handelDates,dates}) => {
-   
+const AddRoomForm = ({ handelDates, dates, handelFormData, handelPreviewInage, imagePreview, imageName }) => {
+
 
     return (
         <div className='w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50'>
-            <form>
+
+            <form onSubmit={handelFormData}>
                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-10'>
                     <div className='space-y-6'>
                         <div className='space-y-1 text-sm'>
@@ -68,11 +69,12 @@ const AddRoomForm = ({handelDates,dates}) => {
                             />
                         </div>
 
-                        <div className=' p-4 bg-white w-full  m-auto rounded-lg'>
-                            <div className='file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg'>
+                        <div className='flex items-center gap-2 p-4 bg-white w-full border-dotted border-4  m-auto rounded-lg'>
+                            <div className='flex-1 file_upload px-5 relative   border-gray-300 rounded-lg'>
                                 <div className='flex flex-col w-max mx-auto text-center'>
                                     <label>
                                         <input
+                                            onChange={(e) => handelPreviewInage(e.target.files[0])}
                                             className='text-sm cursor-pointer w-36 hidden'
                                             type='file'
                                             name='image'
@@ -81,10 +83,15 @@ const AddRoomForm = ({handelDates,dates}) => {
                                             hidden
                                         />
                                         <div className='bg-rose-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-rose-500'>
-                                            Upload Image
+                                            {imageName ? <span>
+                                                {imageName.length > 15 ? imageName.split('.')[0].slice(0, 15) + "...." + imageName.split('.')[1] : imageName}
+                                            </span> : "Upload Image"}
                                         </div>
                                     </label>
                                 </div>
+                            </div>
+                            <div className='w-14 h-14'>
+                                <img src={imagePreview} alt="" />
                             </div>
                         </div>
                         <div className='flex justify-between gap-2'>
