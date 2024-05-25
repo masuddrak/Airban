@@ -15,6 +15,7 @@ const Navbar = () => {
   const closeModal = async () => {
     setHostmodal(false)
   }
+  // host request 
   const handelRequestHost = async () => {
     const sendUserData = {
       email: user?.email,
