@@ -10,7 +10,7 @@ const Login = () => {
   const naviget = useNavigate()
   const [inputEmail, setInputemail] = useState("")
   const location=useLocation()
-  const from=location?.state || {}
+  const from=location?.state 
   const handelForm = async (e) => {
     e.preventDefault()
     const form = e.target
@@ -22,7 +22,7 @@ const Login = () => {
       // create user
       await signIn(email, password)
       setLoading(false)
-      naviget(from)
+      naviget(from || "/")
       toast.success('Signin User Successfully!')
     } catch (error) {
       console.log(error)
@@ -48,7 +48,7 @@ const Login = () => {
   const handelGoogleSignin = async () => {
     try {
       await signInWithGoogle()
-      naviget(from)
+      naviget(from || "/")
       toast.success('Login Successfully!')
     } catch (error) {
       console.log(error)
