@@ -7,11 +7,13 @@ import avatarImg from '../../../assets/images/placeholder.jpg'
 import HostModal from '../../Modal/HostModal'
 import useAxiosSecure from '../../../hooks/useAxiosSecure'
 import toast from "react-hot-toast";
+import useRole from '../../../hooks/useRole'
 const Navbar = () => {
   const { user, logOut } = useAuth()
   const axiosSecure = useAxiosSecure()
   const [isOpen, setIsOpen] = useState(false)
   const [hostModal, setHostmodal] = useState(false)
+  const [role] = useRole()
   const closeModal = async () => {
     setHostmodal(false)
   }
@@ -55,18 +57,20 @@ const Navbar = () => {
             <div className='relative'>
               <div className='flex flex-row items-center gap-3'>
                 {/* Become A Host btn */}
-                <div className='hidden md:block'>
-                  {/* {!user && ( */}
-                  <button
-                    disabled={!user}
-                    onClick={() => setHostmodal(true)}
-                    className='disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-100 py-3 px-4 text-sm font-semibold rounded-full  transition'
-                  >
-                    Host your home
-                  </button>
-                  <HostModal closeModal={closeModal} isOpen={hostModal} handelRequestHost={handelRequestHost}></HostModal>
-                  {/* )} */}
-                </div>
+                {
+                  role === "guest" && <div className='hidden md:block'>
+                    {/* {!user && ( */}
+                    <button
+                      disabled={!user}
+                      onClick={() => setHostmodal(true)}
+                      className='disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-100 py-3 px-4 text-sm font-semibold rounded-full  transition'
+                    >
+                      Host your home
+                    </button>
+                    <HostModal closeModal={closeModal} isOpen={hostModal} handelRequestHost={handelRequestHost}></HostModal>
+                    {/* )} */}
+                  </div>
+                }
                 {/* Dropdown btn */}
                 <div
                   onClick={() => setIsOpen(!isOpen)}

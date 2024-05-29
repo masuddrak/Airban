@@ -1,24 +1,29 @@
 import { useState } from 'react'
 import { GrLogout } from 'react-icons/gr'
 import { FcSettings } from 'react-icons/fc'
-import { BsFillHouseAddFill } from 'react-icons/bs'
 import { AiOutlineBars } from 'react-icons/ai'
-import { BsGraphUp } from 'react-icons/bs'
 import useAuth from '../../../hooks/useAuth'
 import { Link } from 'react-router-dom'
-import { MdHomeWork } from "react-icons/md";
 import useRole from '../../../hooks/useRole'
 import MenuItem from './menus/MenuItem'
+import GuestMenu from './menus/GuestMenu'
+import HostMenu from './menus/HostMenu'
+import AdminMenu from './menus/AdminMenu'
+import ToggleBtn from '../../Shared/Button/ToggleBtn'
 
 
 const Sidebar = () => {
   const { logOut } = useAuth()
   const [isActive, setActive] = useState(false)
   const [role] = useRole()
-  console.log(role)
+  const [toggle,setToggle]=useState(false)
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive)
+  }
+  const toggleHandler = (event) => {
+    setToggle(event.target.checked)
+    console.log(toggle)
   }
   return (
     <>
@@ -67,34 +72,12 @@ const Sidebar = () => {
           </div>
 
           {/* Nav Items */}
-          <div className='flex flex-col justify-between flex-1 mt-6'>
-            {/* Conditional toggle button here.. */}
-
-            {/*  Menu Items */}
-            <nav>
-              {/* Statistics */}
-              <MenuItem
-                label={"Statistics"}
-                icon={BsGraphUp}
-                address={"/dashboard"}
-              ></MenuItem>
-
-              {/* Add Room */}
-              <MenuItem
-                label={"Add Room"}
-                icon={BsFillHouseAddFill}
-                address={"add-room"}
-              ></MenuItem>
-
-              {/* My Listing */}
-              <MenuItem
-                label={"My Listings"}
-                icon={MdHomeWork}
-                address={"my-listings"}
-              ></MenuItem>
-              
-            </nav>
+          <div className='mt-5'>
+            {role==="host" && <ToggleBtn toggleHandler={toggleHandler} toggle={toggle}></ToggleBtn>}
           </div>
+          {role === "guest" && <GuestMenu></GuestMenu>}
+          {role === "host"?(toggle?<HostMenu></HostMenu>:<GuestMenu></GuestMenu>):undefined}
+          {role === "admin" && <AdminMenu></AdminMenu>}
         </div>
 
         <div>
@@ -102,10 +85,10 @@ const Sidebar = () => {
 
           {/* Profile Menu */}
           <MenuItem
-                label={"Profile"}
-                icon={FcSettings}
-                address={"/dashboard/profile"}
-              ></MenuItem>
+            label={"Profile"}
+            icon={FcSettings}
+            address={"/dashboard/profile"}
+          ></MenuItem>
           <button
             onClick={logOut}
             className='flex w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform'
