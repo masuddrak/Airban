@@ -14,6 +14,8 @@ import Profile from '../pages/Dashboard/Common/Profile'
 import ManageUsers from '../pages/Dashboard/Admin/ManageUsers'
 import AdminRoute from './AdminRoute'
 import HostRoute from './HostRoute'
+import MyBookings from '../pages/Dashboard/Guest/MyBookings'
+import ManageBookings from '../pages/Dashboard/Host/ManageBookings'
 
 export const router = createBrowserRouter([
   {
@@ -48,8 +50,16 @@ export const router = createBrowserRouter([
         element: <PrivateRoute><AddRooms></AddRooms></PrivateRoute>
       },
       {
+        path: "my-bookings",
+        element: <PrivateRoute><MyBookings></MyBookings></PrivateRoute>
+      },
+      {
         path: "my-listings",
         element: <PrivateRoute><HostRoute><MyListings></MyListings></HostRoute></PrivateRoute>
+      },
+      {
+        path: "manage-bookings",
+        element: <PrivateRoute><HostRoute><ManageBookings></ManageBookings></HostRoute></PrivateRoute>
       },
       {
         path: "profile",
